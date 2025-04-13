@@ -5,6 +5,7 @@ import {
   REMOVE_PARTICIPANT,
   UPDATE_USER,
   UPDATE_PARTICIPANT,
+  UPDATE_FACE,
 } from "./actiontypes";
 
 export const setMainStream = (stream) => {
@@ -30,6 +31,15 @@ export const addParticipant = (user) => {
     type: ADD_PARTICIPANT,
     payload: {
       newUser: user,
+    },
+  };
+};
+
+export const updateFaceMode = (payload) => {
+  return {
+    type: UPDATE_FACE,
+    payload: {
+      face: payload,
     },
   };
 };

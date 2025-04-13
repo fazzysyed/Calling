@@ -17,10 +17,19 @@ export const db = firebase;
 
 var firepadRef = firebase.database().ref();
 
-export const userName = "testing";
+function generateRandomName() {
+  // Generate a random number between 10000 and 99999
+  const randomNumber = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
+
+  // Concatenate "EHR_" with the random number
+  return `EHR_${randomNumber}`;
+}
+
 const urlparams = new URLSearchParams(window.location.search);
 const roomId = urlparams.get("id");
+const userId = urlparams.get("userId");
 
+export const userName = userId ? userId : generateRandomName();
 if (roomId) {
   firepadRef = firepadRef.child(roomId);
 } else {

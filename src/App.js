@@ -9,18 +9,23 @@ import {
   removeParticipant,
   updateParticipant,
 } from "./store/actioncreator";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import Demo from "./components/MessageRoom/Demo";
+import ChatWindow from "./components/ChatWindow/ChatWindow";
 
 function App(props) {
+  const facingMode = useSelector((state) => state.faceMode);
+
   const getUserStream = async () => {
+    console.log(facingMode);
     const localStream = await navigator.mediaDevices.getUserMedia({
       audio: true,
-      video: true,
+      video: { facingMode: { ideal: facingMode } },
     });
 
     return localStream;
   };
+
   useEffect(async () => {
     const stream = await getUserStream();
     stream.getVideoTracks()[0].enabled = false;
@@ -81,7 +86,6 @@ function App(props) {
   return (
     <div className="App">
       <MainScreen />
-      <Demo />
     </div>
   );
 }

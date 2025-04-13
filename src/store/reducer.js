@@ -5,6 +5,7 @@ import {
   REMOVE_PARTICIPANT,
   UPDATE_USER,
   UPDATE_PARTICIPANT,
+  UPDATE_FACE,
 } from "./actiontypes";
 
 import {
@@ -17,6 +18,7 @@ let defaultUserState = {
   mainStream: null,
   participants: {},
   currentUser: null,
+  faceMode: "user",
 };
 
 const servers = {
@@ -34,7 +36,11 @@ const generateColor = () =>
   "#" + Math.floor(Math.random() * 16777215).toString(16);
 
 export const userReducer = (state = defaultUserState, action) => {
-  if (action.type === SET_MAIN_STREAM) {
+  if (action.type === UPDATE_FACE) {
+    let payload = action.payload;
+
+    state = { ...state, faceMode: payload?.face };
+  } else if (action.type === SET_MAIN_STREAM) {
     let payload = action.payload;
     state = { ...state, ...payload };
     return state;

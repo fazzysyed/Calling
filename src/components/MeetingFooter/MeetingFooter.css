@@ -1,31 +1,51 @@
-.meeting-footer{
-    background: #202124; 
-    height: 100%;    
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.meeting-footer {
+  background: #202124;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.meeting-icons{
-    color: white;
-    border-radius: 50%;
-    background:#3c4043;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    margin: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+.meeting-icons {
+  color: white;
+  border-radius: 50%;
+  background: #3c4043;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .active {
-  background-color:   #ea4335;
+  background-color: #ea4335;
 }
 
-div[disabled]
-{
+div[disabled] {
   pointer-events: none;
   opacity: 0.3;
+}
+.camera-select {
+  color: white;
+  background: #3c4043;
+  border: none;
+  /* border-radius: 50%; */
+  width: 250px;
+  height: 40px;
+  margin: 10px;
+  text-align: center;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-left: 5px;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.camera-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #5f6368;
 }

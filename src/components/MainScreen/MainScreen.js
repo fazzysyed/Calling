@@ -1,12 +1,20 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import MeetingFooter from "../MeetingFooter/MeetingFooter";
 import Participants from "../Participants/Participants";
 import "./MainScreen.css";
-import { connect } from "react-redux";
-import { setMainStream, updateUser } from "../../store/actioncreator";
+import { connect, useDispatch, useSelector } from "react-redux";
+import {
+  setMainStream,
+  updateUser,
+  updateFaceMode,
+} from "../../store/actioncreator";
+import ChatWindow from "../ChatWindow/ChatWindow";
 
 const MainScreen = (props) => {
   const participantRef = useRef(props.participants);
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const faceMode = useSelector((state) => state.faceMode);
+  const dispatch = useDispatch();
 
   const onMicClick = (micEnabled) => {
     if (props.stream) {
@@ -38,6 +46,24 @@ const MainScreen = (props) => {
     props.setMainStream(stream);
   };
 
+  const handleDeviceChange = async (camera) => {
+    const newDeviceId = camera;
+
+    if (props.stream) {
+      props.stream.getTracks().forEach((track) => track.stop());
+    }
+
+    try {
+      const newStream = await navigator.mediaDevices.getUserMedia({
+        video: newDeviceId ? { deviceId: newDeviceId } : true,
+        audio: newDeviceId ? { deviceId: newDeviceId } : true,
+      });
+
+      updateStream(newStream);
+    } catch (error) {
+      console.error("Error switching camera:", error);
+    }
+  };
   const onScreenShareEnd = async () => {
     const localStream = await navigator.mediaDevices.getUserMedia({
       audio: true,
@@ -79,8 +105,47 @@ const MainScreen = (props) => {
         <Participants />
       </div>
 
+      {isChatOpen && (
+        <ChatWindow
+          onClose={() => {
+            setIsChatOpen(false);
+          }}
+        />
+      )}
+
       <div className="footer">
         <MeetingFooter
+          switchMobile={async () => {
+            if (props.stream) {
+              props.stream.getTracks().forEach((track) => track.stop());
+            }
+
+            try {
+              const newStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                  facingMode: {
+                    ideal: faceMode === "user" ? "environment" : "user",
+                  },
+                },
+                audio: true,
+              });
+
+              console.log(faceMode, "faceModefaceMode");
+              updateStream(newStream);
+              dispatch(
+                updateFaceMode(faceMode === "user" ? "environment" : "user")
+              );
+            } catch (error) {
+              console.error("Error switching camera:", error);
+            }
+          }}
+          onCameraChange={(camera) => {
+            handleDeviceChange(camera);
+            console.log(camera);
+          }}
+          openChat={() => {
+            setIsChatOpen(true);
+          }}
           onScreenClick={onScreenClick}
           onMicClick={onMicClick}
           onVideoClick={onVideoClick}
